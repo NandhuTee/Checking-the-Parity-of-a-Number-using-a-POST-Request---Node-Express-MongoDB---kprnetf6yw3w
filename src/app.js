@@ -4,7 +4,7 @@ const server = http.createServer((req, res) => {
   if (req.method === 'POST' && req.url === '/') {
     let body = '';
 
-    // Read the incoming request body data
+    // Read the request body data
     req.on('data', chunk => {
       body += chunk;
     });
@@ -25,24 +25,24 @@ const server = http.createServer((req, res) => {
           return;
         }
 
-        // Check if num1 is even or odd
+        // Determine whether num1 is even or odd
         if (num1 % 2 === 0) {
-          // If num1 is even, respond with 200 OK and a message indicating the number is even
+          // If num1 is even
           res.writeHead(200, {'Content-Type': 'text/plain'});
           res.end(`The number ${num1} is even.`);
         } else {
-          // If num1 is odd, respond with 404 Not Found and a message indicating the number is odd
+          // If num1 is odd
           res.writeHead(404, {'Content-Type': 'text/plain'});
           res.end(`The number ${num1} is odd.`);
         }
       } catch (error) {
-        // Handle any JSON parsing errors
+        // Handle JSON parsing errors
         res.writeHead(400, {'Content-Type': 'text/plain'});
         res.end('Invalid request format: Please provide valid JSON data.');
       }
     });
   } else {
-    // If the request method is not POST or the URL is not "/", respond with 405 Method Not Allowed
+    // If the request method is not POST or the URL is not "/"
     res.writeHead(405, {'Content-Type': 'text/plain'});
     res.end('Method Not Allowed');
   }
