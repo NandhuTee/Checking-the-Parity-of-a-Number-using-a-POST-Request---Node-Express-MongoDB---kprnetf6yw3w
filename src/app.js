@@ -14,15 +14,13 @@ const server = http.createServer((req, res) => {
         const num1 = parseInt(data.num1);
 
         if (!isNaN(num1)) {
-          let result;
-            if (num1 % 2 === 0) {
-              result = The number ${num1} is even;
-              res.writeHead(200, { 'Content-Type': 'text/plain' });
-            } else {
-              result = The number ${num1} is odd;
-              res.writeHead(404, { 'Content-Type': 'text/plain' });
+          if (num1 % 2 === 0) {
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+            res.end(`The number ${num1} is even`);
+          } else {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end(`The number ${num1} is odd`);
           }
-          res.end(result);
         } else {
           res.writeHead(400, { 'Content-Type': 'text/plain' });
           res.end('Invalid input: num1 must be a number');
