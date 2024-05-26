@@ -1,28 +1,35 @@
-// app.js
-
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-  if (req.method === 'POST') {
-    const chunks = [];
+  if (req.method === 'POST' && req.url === '/') {
+    let body = '';
 
     req.on('data', chunk => {
-      const buf = Buffer.from(chunk);
-      const str = buf.toString();
-      chunks.push(str);
-      const obj = JSON.parse(chunks.join(''));
+      body += chunk.toString();
+    });
 
-      // Check if the number is odd or even
-      const num = obj.num1;
-      const result = num % 2 === 0 ? 'even' : 'odd';
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body);
+        const num1 = parseInt(data.num1);
 
-      // Set appropriate status code and response
-      if (Number.isInteger(num)) {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end(`The number ${num} is ${result}.`);
-      } else {
+        if (!isNaN(num1)) {
+          let result;
+            if (num1 % 2 === 0) {
+              result = The number ${num1} is even;
+              res.writeHead(200, { 'Content-Type': 'text/plain' });
+            } else {
+              result = The number ${num1} is odd;
+              res.writeHead(404, { 'Content-Type': 'text/plain' });
+          }
+          res.end(result);
+        } else {
+          res.writeHead(400, { 'Content-Type': 'text/plain' });
+          res.end('Invalid input: num1 must be a number');
+        }
+      } catch (error) {
         res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Invalid input. Please provide a valid integer.');
+        res.end('Invalid JSON format');
       }
     });
   } else {
